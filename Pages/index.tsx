@@ -1,7 +1,6 @@
-import Navbar from "@/components/navbar";
-import QuestionCard from "@/components/question-card";
+import Information from "@/components/information";
 
 const HomePage = () => {
-  return;
+  return <Information />;
 };
 export default HomePage;
