@@ -1,23 +1,32 @@
+import axios from "axios";
 import styles from "../styles/form.module.css";
-import { useRef } from "react";
+
+import { useRef, useEffect } from "react";
 const FormItem: React.FC<{
   onDataGetter: (data: {
     name: string;
     email: string;
     password: string;
+    score: number;
   }) => void;
 }> = (props) => {
+  useEffect(() => {
+    axios.get("api/pj-api").then((response) => {
+      console.log(response);
+    });
+  }, []);
   const name = useRef<HTMLInputElement>(null);
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
+
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
-    const data = {
+    props.onDataGetter({
       name: name.current!.value,
       email: email.current!.value,
       password: password.current!.value,
-    };
-    props.onDataGetter(data);
+      score: 0,
+    });
     name.current!.value = "";
     email.current!.value = "";
     password.current!.value = "";

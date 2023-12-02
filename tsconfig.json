@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "Pages/_app.tsx",
-    "components/navbar.jsx"
+    "components/navbar.jsx",
+    "Pages/api/pj-api.js"
   ],
   "exclude": ["node_modules"]
 }

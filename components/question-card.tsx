@@ -4,7 +4,7 @@ const QuestionCard: React.FC<{
   data: { quest: string; options: string[]; answer: string; id: string }[];
 }> = (props) => {
   const item1 = props.data[0];
-  console.log("first");
+
   return (
     <form
       className={`${

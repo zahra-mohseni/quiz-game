@@ -19,7 +19,6 @@ const Quiz: React.FC = () => {
       id: "a2",
     },
   ];
-  console.log("first");
 
   return (
     <>
