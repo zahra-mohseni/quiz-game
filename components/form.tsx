@@ -10,11 +10,11 @@ const FormItem: React.FC<{
     score: number;
   }) => void;
 }> = (props) => {
-  useEffect(() => {
+  /*useEffect(() => {
     axios.get("api/pj-api").then((response) => {
       console.log(response);
     });
-  }, []);
+  }, []);*/
   const name = useRef<HTMLInputElement>(null);
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);

@@ -8,7 +8,10 @@ const Authentication = () => {
     password: string;
     score: number;
   }) => {
-    const response = await axios.post("/api/pj-api", data);
+    axios.post("/api/pj-api", data).then((response) => {
+      console.log(response);
+      console.log(response.data.responsedData);
+    });
   };
 
   return <FormItem onDataGetter={dataGether} />;

@@ -1,30 +1,19 @@
+import axios from "axios";
+import { json } from "stream/consumers";
 import { MongoClient } from "mongodb";
 async function haandler(req, res) {
   if (req.method === "POST") {
-    const data = req.body;
+    const newData = req.body;
+    console.log(newData);
 
-    console.log(data);
     const client = await MongoClient.connect(
-      "mongodb+srv://mohseniz25:pzblyP3MTX8jFVN5@cluster0.df9aj2h.mongodb.net/?retryWrites=true&w=majority"
+      "mongodb+srv://mohseniz25:PLsUGaAZOK6qkYsM@cluster0.sbiuujd.mongodb.net/quiz?retryWrites=true&w=majority"
     );
-
-    const db = client.db("quiz");
-    const dataCollection = db.collection("authentication");
-    const result = await dataCollection.insertOne(data);
-    console.log(result);
+    const db = client.db();
+    const collection = await db.collection("authentication").insertOne(newData);
+    console.log(collection);
     client.close();
-    res.status(201).json("data saved succesfully");
-  } else if (req.method === "GET") {
-    const client = await MongoClient.connect(
-      "mongodb+srv://mohseniz25:pzblyP3MTX8jFVN5@cluster0.df9aj2h.mongodb.net/?retryWrites=true&w=majority"
-    );
-
-    const db = client.db("quiz");
-    const dataCollection = db.collection("authentication");
-    const result = await dataCollection.find({}).toArray();
-    client.close();
-    res.status(202).json({ message: "collected data successfuly", result });
-    res.body = result;
+    res.status(200).json({ message: "connected", responsedData: newData });
   }
 }
 
