@@ -18,3 +18,8 @@
   margin-top: 28px;
   padding: 2px;
 }
+.error {
+  color: #ad2121;
+  margin: 8px;
+  font-size: 16px;
+}

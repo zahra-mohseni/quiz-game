@@ -28,11 +28,16 @@ const Authentication = () => {
     score: number;
   }) => {
     axios.post("/api/pj-api", data).then((response) => {
-      let user = response.data.responsedData;
-      let userToken = response.data.token;
-      setUser(user);
-      setToken(userToken);
-      router.push("/");
+      if (response.status === 200) {
+        let user = response.data.responsedData;
+        let userToken = response.data.token;
+        setUser(user);
+        setToken(userToken);
+        router.push("/");
+      } else if (response.status === 202) {
+        let error = response.data.message;
+        alert(error);
+      }
     });
   };
 
