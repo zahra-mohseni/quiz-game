@@ -1,26 +1,18 @@
 import axios from "axios";
-import styles from "../styles/form.module.css";
+import styles from "../styles/sign-in.module.css";
 import { useRouter } from "next/router";
 import { useRef, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useContext } from "react";
 import LogContext from "@/context/log-context";
-const FormItem: React.FC<{
-  onDataGetter: (data: {
-    name: string;
-    email: string;
-    password: string;
-    score: number;
-  }) => void;
+const SignInForm: React.FC<{
+  onSignDataGetter: (data: { email: string; password: string }) => void;
+  serverError: string;
 }> = (props) => {
   const ctx = useContext(LogContext);
   const [submitting, setIsSubmitting] = useState<boolean>(false);
   const [changer, setChanger] = useState<boolean>(false);
-  const [mode, setMode] = useState<string>("sign-up");
-  const searchParams = useSearchParams();
-  const params = searchParams?.get("mode");
-  console.log(params);
-  const name = useRef<HTMLInputElement>(null);
+
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
 
@@ -28,11 +20,9 @@ const FormItem: React.FC<{
     e.preventDefault();
     setIsSubmitting(true);
     setChanger(!changer);
-    props.onDataGetter({
-      name: name.current!.value,
+    props.onSignDataGetter({
       email: email.current!.value,
       password: password.current!.value,
-      score: 0,
     });
   };
   const logOutHandler = () => {
@@ -40,11 +30,12 @@ const FormItem: React.FC<{
       localStorage.removeItem("token");
       localStorage.removeItem("expiration");
       ctx.logOut();
+      setIsSubmitting(false);
     }
   };
-  const signInHandler = (e: React.FormEvent) => {
+  const signUpHandler = (e: React.FormEvent) => {
     e.preventDefault();
-    ctx.toSignIn();
+    ctx.toSignUp();
   };
   return (
     <>
@@ -59,7 +50,6 @@ const FormItem: React.FC<{
           <button onClick={logOutHandler} style={{ borderRadius: 8 }}>
             log out
           </button>
-          {}
         </div>
       ) : (
         <form
@@ -73,24 +63,13 @@ const FormItem: React.FC<{
           >
             <li className=" d-flex flex-column col-md-10 mx-auto col-lg-10 col-sm-10 ">
               {" "}
-              <label htmlFor="name">Name</label>
-              {submitting && name.current?.value === "" && (
-                <p className={styles.error}>please enter your name</p>
-              )}
-              <input
-                ref={name}
-                type="text"
-                id="name"
-                placeholder="please enter your name"
-              />
-            </li>
-
-            <li className=" d-flex flex-column col-md-10 mx-auto col-lg-10 col-sm-10 ">
-              {" "}
               <label htmlFor="email">Email</label>
-              {!email.current?.value.includes("@") && submitting && (
-                <p className={styles.error}>please a valid email(include @)</p>
-              )}
+              {email.current?.value.trim().length > 0 &&
+                !email.current?.value.includes("@") && (
+                  <p className={styles.error}>
+                    please a valid email(include @)
+                  </p>
+                )}
               <input
                 ref={email}
                 id="email"
@@ -113,21 +92,25 @@ const FormItem: React.FC<{
                 placeholder="please enter your password"
               />
             </li>
+            {props.serverError.trim().length > 0 && (
+              <p className={styles["error-message"]}>{props.serverError}</p>
+            )}
+
             <button
               className={`${"mx-auto col-sm-3 col-md-3 col-3 col-lg-3"} ${
                 styles["button"]
               }`}
-            >
-              sign up
-            </button>
-            <p className={styles.sign}>already have an account ?</p>
-            <button
-              className={`${"mx-auto col-sm-3 col-md-3 col-3 col-lg-3"} ${
-                styles["button"]
-              }`}
-              onClick={signInHandler}
             >
               sign in
+            </button>
+            <p className={styles.sign}> did not create an account before ?</p>
+            <button
+              className={`${"mx-auto col-sm-3 col-md-3 col-3 col-lg-3"} ${
+                styles["button"]
+              }`}
+              onClick={signUpHandler}
+            >
+              sign up
             </button>
           </ul>
         </form>
@@ -135,4 +118,4 @@ const FormItem: React.FC<{
     </>
   );
 };
-export default FormItem;
+export default SignInForm;

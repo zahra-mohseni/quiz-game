@@ -19,11 +19,6 @@ const StyledBtn = styled.button`
   margin: 9px;
 `;
 const InformationPage = () => {
-  useEffect(() => {
-    axios.get("api/pj-api").then(function (response) {
-      console.log(response);
-    });
-  }, []);
   return (
     <div className="row d-flex flex-column align-items-center ">
       {" "}

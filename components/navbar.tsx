@@ -1,23 +1,19 @@
 import Link from "next/link";
-
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
-import { logActions } from "../redux/store";
 import styles from "../styles/navbar.module.css";
+import { useContext } from "react";
+import LogContext from "@/context/log-context";
 const Navbar = () => {
-  const isLogIn = useSelector((state: any) => state.logState.isLogedIn);
-  console.log(isLogIn);
-  const [tokenId, setTokenId] = useState<string | null>(null);
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      let tok = localStorage.getItem("token");
-      if (tok) {
-        console.log("token find");
-        setTokenId(tok);
-      }
+  const ctx = useContext(LogContext);
+
+  if (typeof window !== "undefined" && window.localStorage) {
+    let tok = localStorage.getItem("token");
+    if (tok) {
+      console.log("token find");
+      ctx.logIn();
+      console.log("it happend");
     }
-  }, [tokenId]);
+  }
 
   const logHandler = () => {
     if (typeof window !== "undefined" && window.localStorage) {
@@ -27,11 +23,12 @@ const Navbar = () => {
         console.log("token exist");
         localStorage.removeItem("token");
         localStorage.removeItem("expiration");
-        setTokenId("");
+        ctx.logOut();
         console.log("token removed");
       }
     }
   };
+  console.log(ctx.signMode);
   return (
     <div className={styles.navbar}>
       <div>
@@ -46,10 +43,10 @@ const Navbar = () => {
         </Link>
       </div>{" "}
       <button className={styles.button} onClick={logHandler}>
-        {tokenId === null ? (
+        {ctx.isLogedIn === false ? (
           <p style={{ margin: 0 }}>quest user</p>
         ) : (
-          <p style={{ margin: 0 }}> log out </p>
+          <p style={{ margin: 0 }}>log out</p>
         )}
       </button>
     </div>
