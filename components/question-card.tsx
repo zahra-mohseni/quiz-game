@@ -1,9 +1,21 @@
 import styles from "../styles/question-card.module.css";
-import { FC } from "react";
+import React, { FC, useState } from "react";
 const QuestionCard: React.FC<{
-  data: { quest: string; options: string[]; answer: string; id: string }[];
+  data: { question: string; options: string[]; answer: string; id: string }[];
 }> = (props) => {
-  const item1 = props.data[0];
+  const mainData = props.data;
+  let firtItem = mainData[0];
+  const [itemIndex, setItemIndex] = useState(0);
+  let x = 0;
+  let quest = mainData[itemIndex];
+  const dataLength = mainData.length;
+  console.log(dataLength);
+  const dataSwicher = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (itemIndex < dataLength - 1) {
+      setItemIndex((prev) => prev + 1);
+    }
+  };
 
   return (
     <form
@@ -12,7 +24,7 @@ const QuestionCard: React.FC<{
       } ${"row d-flex flex-column align-items-center mx-auto"}`}
     >
       <div className={`${styles["qustion-card"]} ${"row w-75 display-1"}`}>
-        {item1.quest}
+        {quest.question}
       </div>
       <div className={`${styles["button-box"]} ${"row w-75"}`}>
         <div
@@ -22,11 +34,11 @@ const QuestionCard: React.FC<{
         >
           {" "}
           <button className={`${styles.button} ${"col-md-6"}`}>
-            {item1.options[0]}
+            {quest.options[0]}
           </button>
           <button className={`${styles.button} ${"col-md-6"}`}>
             {" "}
-            {item1.options[1]}
+            {quest.options[1]}
           </button>
         </div>
         <div
@@ -36,16 +48,18 @@ const QuestionCard: React.FC<{
         >
           <button className={`${styles.button} ${"col-md-6"}`}>
             {" "}
-            {item1.options[2]}
+            {quest.options[2]}
           </button>
           <button className={`${styles.button} ${"col-md-6"}`}>
             {" "}
-            {item1.options[3]}
+            {quest.options[3]}
           </button>
         </div>
       </div>
       <div className="container d-flex flex-column align-items-center">
-        <button className={styles["next-button"]}>next question</button>
+        <button className={styles["next-button"]} onClick={dataSwicher}>
+          next question
+        </button>
       </div>
     </form>
   );

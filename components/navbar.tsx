@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useState, useEffect } from "react";
+
 import styles from "../styles/navbar.module.css";
 import { useContext } from "react";
 import LogContext from "@/context/log-context";
@@ -28,7 +28,7 @@ const Navbar = () => {
       }
     }
   };
-  console.log(ctx.signMode);
+
   return (
     <div className={styles.navbar}>
       <div>

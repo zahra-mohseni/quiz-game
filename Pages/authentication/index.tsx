@@ -12,6 +12,7 @@ const Authentication = () => {
   const [mode, setMode] = useState<string>("sign-up");
   const searchParams = useSearchParams();
   const [serverError, setServerError] = useState("");
+
   const params = searchParams?.get("mode");
   console.log(params);
   const [user, setUser] = useState<{
@@ -27,6 +28,13 @@ const Authentication = () => {
     const expirationTime = new Date();
     expirationTime.setHours(expirationTime.getHours() + 1);
     localStorage.setItem("expiration", expirationTime.toISOString());
+    let isExpired = new Date();
+    let timeSpending = expirationTime.getHours() - isExpired.getHours();
+    if (timeSpending < 0) {
+      ctx.logOut();
+      localStorage.removeItem("token");
+      localStorage.removeItem("expiration");
+    }
   }
 
   const router = useRouter();
