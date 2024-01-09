@@ -1,22 +1,37 @@
+import LogContext from "@/context/log-context";
 import styles from "../styles/question-card.module.css";
-import React, { FC, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 const QuestionCard: React.FC<{
   data: { question: string; options: string[]; answer: string; id: string }[];
 }> = (props) => {
+  const ctx = useContext(LogContext);
   const mainData = props.data;
-  let firtItem = mainData[0];
+  const [score, setScore] = useState(0);
   const [itemIndex, setItemIndex] = useState(0);
   let x = 0;
   let quest = mainData[itemIndex];
   const dataLength = mainData.length;
-  console.log(dataLength);
+  const selectHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+  };
   const dataSwicher = (e: React.FormEvent) => {
     e.preventDefault();
     if (itemIndex < dataLength - 1) {
       setItemIndex((prev) => prev + 1);
     }
   };
-
+  if (typeof window !== "undefined" && window.localStorage) {
+    let token = localStorage.getItem("token");
+    if (token) {
+      let expirationTime = Number(localStorage.getItem("expiration"));
+      let presentTime = new Date().getTime();
+      if (expirationTime - presentTime < 0) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("expiration");
+        ctx.logOut();
+      }
+    }
+  }
   return (
     <form
       className={`${
@@ -33,10 +48,16 @@ const QuestionCard: React.FC<{
           } ${"row d-flex flex-row align-items-center"}`}
         >
           {" "}
-          <button className={`${styles.button} ${"col-md-6"}`}>
+          <button
+            className={`${styles.button} ${"col-md-6"}`}
+            onClick={selectHandler}
+          >
             {quest.options[0]}
           </button>
-          <button className={`${styles.button} ${"col-md-6"}`}>
+          <button
+            className={`${styles.button} ${"col-md-6"}`}
+            onClick={selectHandler}
+          >
             {" "}
             {quest.options[1]}
           </button>
@@ -46,11 +67,17 @@ const QuestionCard: React.FC<{
             styles["button-container"]
           } ${"row d-flex flex-row align-items-center"}`}
         >
-          <button className={`${styles.button} ${"col-md-6"}`}>
+          <button
+            className={`${styles.button} ${"col-md-6"}`}
+            onClick={selectHandler}
+          >
             {" "}
             {quest.options[2]}
           </button>
-          <button className={`${styles.button} ${"col-md-6"}`}>
+          <button
+            className={`${styles.button} ${"col-md-6"}`}
+            onClick={selectHandler}
+          >
             {" "}
             {quest.options[3]}
           </button>

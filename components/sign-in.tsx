@@ -64,12 +64,11 @@ const SignInForm: React.FC<{
             <li className=" d-flex flex-column col-md-10 mx-auto col-lg-10 col-sm-10 ">
               {" "}
               <label htmlFor="email">Email</label>
-              {email.current?.value.trim().length > 0 &&
-                !email.current?.value.includes("@") && (
-                  <p className={styles.error}>
-                    please a valid email(include @)
-                  </p>
-                )}
+              {submitting && !email.current?.value.includes("@") && (
+                <p className={styles.error}>
+                  please enter a valid email(include @)
+                </p>
+              )}
               <input
                 ref={email}
                 id="email"

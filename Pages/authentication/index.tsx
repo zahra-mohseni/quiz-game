@@ -23,20 +23,6 @@ const Authentication = () => {
   }>();
   const [token, setToken] = useState<string>("");
 
-  if (typeof window !== "undefined" && window.localStorage && token !== "") {
-    let token = localStorage.setItem("token", user!.id);
-    const expirationTime = new Date();
-    expirationTime.setHours(expirationTime.getHours() + 1);
-    localStorage.setItem("expiration", expirationTime.toISOString());
-    let isExpired = new Date();
-    let timeSpending = expirationTime.getHours() - isExpired.getHours();
-    if (timeSpending < 0) {
-      ctx.logOut();
-      localStorage.removeItem("token");
-      localStorage.removeItem("expiration");
-    }
-  }
-
   const router = useRouter();
   const dataGether = async (data: {
     name: string;
@@ -51,7 +37,10 @@ const Authentication = () => {
         let userToken = response.data.token;
         setUser(user);
         setToken(userToken);
-
+        localStorage.setItem("token", user?.id);
+        const expirationTime = new Date();
+        expirationTime.setHours(expirationTime.getHours() + 1);
+        localStorage.setItem("expiration", expirationTime.getTime().toString());
         router.push("/");
       } else if (response.status === 202) {
         let error = response.data.message;
@@ -73,6 +62,10 @@ const Authentication = () => {
         setUser(userData);
         setServerError("");
         ctx.logIn();
+        localStorage.setItem("token", user?.id);
+        const expirationTime = new Date();
+        expirationTime.setHours(expirationTime.getHours() + 1);
+        localStorage.setItem("expiration", expirationTime.getTime().toString());
       } else if (response.status === 206) {
         let message = response.data.message;
         setServerError(message);
